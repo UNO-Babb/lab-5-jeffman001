@@ -3,20 +3,30 @@
 import random
 
 def inWord(letter, word):
-    """Returns boolean if letter is anywhere in the given word"""
-
+    for ch in word:
+        if letter == ch:
+            return True
+    
     return False
 
 def inSpot(letter, word, spot):
-    """Returns boolean response if letter is in the given spot in the word."""
+    correctLetter = word[spot]
+    if letter == correctLetter:
+        return True
+    else:
+        return False
 
-    return False
-
-def rateGuess(myGuess, word):
-    """Rates your guess and returns a word with the following features.
-    - Capital letter if the letter is in the right spot
-    - Lower case letter if the letter is in the word but in the wrong spot
-    - * if the letter is not in the word at all"""
+def rateGuess(guess, word):
+    feedback = ""
+    for idk in range(5):
+        myLetter = guess[idk]
+        if inSpot(myLetter, word, idk) == True:
+            feedback = feedback + myLetter.upper() #Correct spot
+        elif inWord(myLetter, word) == True:
+            feedback = feedback + myLetter.lower() #wrong spot
+        else:
+            feedback = feedback + "*"
+    return feedback
 
 
 def main():
@@ -25,10 +35,30 @@ def main():
     content = wordFile.read()
     wordList = content.split("\n")
     todayWord = random.choice(wordList)
-    print(todayWord)
+    
+    guessNum = 1
+    while guessNum <= 6:
+        validWord = False
+        while validWord == False:
+            myGuess = input("Guess the 5 letter word: ")
+            myGuess = myGuess.lower()
+            if myGuess not in wordList:
+                print("Word not in list")
+            else:
+                validWord = True
 
+        feedback = rateGuess(myGuess, todayWord)
+        print(feedback)
+        if feedback == todayWord.upper():
+            print("You guessed the word in " + str(guessNum) + " tries")
+            guessNum = guessNum + 6
+            win = True
+        guessNum = guessNum + 1
+
+    print("the word was", todayWord)
     #User should get 6 guesses to guess
 
+    print("see ya")
     #Ask user for their guess
     #Give feedback using on their word:
 
